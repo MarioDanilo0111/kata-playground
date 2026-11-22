@@ -6,7 +6,7 @@ import "./App.css";
 
 const BASE_URL = "https://hapi.fhir.org/baseR4";
 
-function buildQS(params) {
+function buildURL(params) {
   const q = new URLSearchParams();
   Object.entries(params).forEach(([k, v]) => {
     if (v !== undefined && v !== null && v !== "") q.append(k, v);
