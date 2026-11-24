@@ -81,10 +81,14 @@ function updateCustomer(
 
   const result: Customer = {
     ...customer,
-    email: payload.email ? payload.email.trim().toLowerCase() : customer.email,
+    ...(payload.email !== undefined && {
+      email: payload.email.trim().toLowerCase(),
+    }),
     address: {
       ...customer.address,
-      city: payload.city ? payload.city.trim() : customer.address.city,
+      ...(payload.city !== undefined && {
+        city: payload.city.trim(),
+      }),
     },
   };
 
