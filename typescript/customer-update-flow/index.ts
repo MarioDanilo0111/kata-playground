@@ -25,7 +25,7 @@ const payload: UpdatePayload = {
   city: "Gothenburg",
 };
 
-type Customer = {
+interface Customer {
   externalId: string;
   email: string;
   active: boolean;
@@ -33,13 +33,19 @@ type Customer = {
     city: string;
     country: string;
   };
-};
+}
 
 type UpdatePayload = {
   externalId: string;
   email?: string;
   city?: string;
   country?: string;
+};
+
+type UpdateResponse = {
+  success: boolean;
+  customer?: Customer;
+  message?: string;
 };
 
 function updateCustomer(
@@ -93,6 +99,29 @@ function updateCustomer(
   };
 
   return result;
+}
+
+async function saveCustomer(
+  customers: Customer[],
+  payload: UpdatePayload,
+): Promise<UpdateResponse> {
+  try {
+    const response = updateCustomer(customers, payload);
+    if (!response) {
+      return {
+        success: false,
+        message: "Customer not found",
+      };
+    }
+    return {
+      success: true,
+      customer: response,
+      message: "Customer updated",
+    };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 console.log(updateCustomer(customers, payload));
