@@ -106,16 +106,17 @@ async function saveCustomer(
   payload: UpdatePayload,
 ): Promise<UpdateResponse> {
   try {
-    const response = updateCustomer(customers, payload);
-    if (!response) {
+    const updatedCustomer = updateCustomer(customers, payload);
+    if (!updatedCustomer) {
       return {
         success: false,
         message: "Customer not found",
       };
     }
+    const savedCustomer = await sendCustomerToApi(updatedCustomer);
     return {
       success: true,
-      customer: response,
+      customer: savedCustomer,
       message: "Customer updated",
     };
   } catch (error) {
@@ -124,4 +125,17 @@ async function saveCustomer(
   }
 }
 
-console.log(updateCustomer(customers, payload));
+async function sendCustomerToApi(customer: Customer): Promise<Customer> {
+  try {
+    return customer;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+async function run() {
+  const result = await saveCustomer(customers, payload);
+  console.log(result);
+}
+
+run();
