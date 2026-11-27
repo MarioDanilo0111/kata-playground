@@ -20,7 +20,7 @@ const customers: Customer[] = [
 ];
 
 const payload: UpdatePayload = {
-  externalId: "02001",
+  externalId: "02002",
   email: " NEW@MAIL.SE ",
   city: "Gothenburg",
 };
@@ -120,22 +120,33 @@ async function saveCustomer(
       message: "Customer updated",
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw error;
   }
 }
 
 async function sendCustomerToApi(customer: Customer): Promise<Customer> {
   try {
+    if (customer.active !== true) {
+      throw new Error("This customer is not active");
+    }
     return customer;
   } catch (error) {
-    console.log(error);
+    // if (error instanceof Error) {
+    //   console.log(error.message);
+    // }
     throw error;
   }
 }
 async function run() {
-  const result = await saveCustomer(customers, payload);
-  console.log(result);
+  try {
+    const result = await saveCustomer(customers, payload);
+    console.log(result);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
 }
 
 run();
